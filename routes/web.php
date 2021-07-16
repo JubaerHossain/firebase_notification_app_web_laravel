@@ -21,5 +21,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/save-token', 'HomeController@saveToken')->name('save-token');
-Route::get('/send-notification', 'HomeController@sendNotification')->name('send.notification');
+Route::post('/save-token', 'HomeController@saveToken')->name('save-token');
+Route::post('/send-notification', 'HomeController@sendNotification')->name('send.notification');
+
+Route::get('firebase/sw-js', 'HomeController@initFirebase');

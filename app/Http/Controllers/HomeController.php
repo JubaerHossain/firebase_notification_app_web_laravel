@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Order;
 use Illuminate\Http\Request;
+use App\Notifications\AlertNotification;
+use Illuminate\Support\Facades\Notification;
 
 class HomeController extends Controller
 {
@@ -29,7 +31,7 @@ class HomeController extends Controller
 
     public function saveToken(Request $request)
     {
-        auth()->user()->update(['device_token' => $request->token]);
+        // auth()->user()->update(['device_token' => $request->token]);
         return response()->json(['token saved successfully.']);
     }
 
@@ -40,5 +42,18 @@ class HomeController extends Controller
      */
     public function sendNotification(Request $request)
     {
+
+        $data = new Order();
+        $data->title = $request->title;
+        $data->body = $request->body;
+        $data->user_id = 1;
+        $data->save();
+        $response =   Notification::send([$data->user], new AlertNotification($data));
+        return $response;
+    }
+
+    public function initFirebase()
+    {
+        return response()->view('notifications.sw_firebase')->header('Content-Type', 'application/javascript');
     }
 }
